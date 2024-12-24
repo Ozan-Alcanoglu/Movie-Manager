@@ -21,14 +21,14 @@ function loadCategories() {
     fetch('http://localhost:8080/moviedb/genres')
         .then(response => {
             if (!response.ok) {
-                throw new Error('Ağ hatası');
+                throw new Error('Network error');
             }
             return response.json();
         })
         .then(categories => {
-            console.log(categories);  // Kategorileri kontrol et
+            console.log(categories);
             const categoryCheckWrapper = document.getElementById('category');
-            categoryCheckWrapper.innerHTML = '';  // Eski içerikleri temizle
+            categoryCheckWrapper.innerHTML = '';
 
             categories.forEach(category => {
                 const label = document.createElement('label');
@@ -49,7 +49,7 @@ function loadCategories() {
             });
         })
         .catch(error => {
-            console.error('Kategori yükleme hatası:', error);
+            console.error('Category loading error:', error);
         });
 }
 
@@ -133,24 +133,22 @@ function addMovie() {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Film eklenirken API hatası oluştu');
+                throw new Error('An API error occurred while adding the movie.');
             }
-            return response.json(); // JSON yanıtını döndür
+            return response.json(); // Return the JSON response
         })
         .then(data => {
-            console.log('Film başarıyla eklendi:', data);
+            console.log('Movie successfully added:', data);
         })
         .catch(error => {
-            console.error('Film eklenirken hata oluştu:', error);
+            console.error('An error occurred while adding the movie:', error);
         });
 
 
-    // Rol ID'leri sabit
     const directorRoleId = 2;
     const actorRoleId = 1;
 
     if (directorRoleId && actorRoleId) {
-        // Yönetmenleri ekleyin
         directors.forEach(director => {
             const directorData = {
                 name: director,
@@ -166,14 +164,13 @@ function addMovie() {
             })
                 .then(response => response.json())
                 .then(directorData => {
-                    console.log('Yönetmen başarıyla eklendi:', directorData);
+                    console.log('Director successfully added:', directorData);
                 })
                 .catch(error => {
-                    console.error('Yönetmen eklenirken hata oluştu:', error);
+                    console.error('An error occurred while adding the director:', error);
                 });
         });
 
-        // Aktörleri ekleyin
         actors.forEach(actor => {
             const actorData = {
                 name: actor,
@@ -189,23 +186,20 @@ function addMovie() {
             })
                 .then(response => response.json())
                 .then(actorData => {
-                    console.log('Aktör başarıyla eklendi:', actorData);
+                    console.log('Actor successfully added:', actorData);
                 })
                 .catch(error => {
-                    console.error('Aktör eklenirken hata oluştu:', error);
+                    console.error('An error occurred while adding the actor:', error);
                 });
         });
-        showMessage("film eklendi");
+        showMessage("Movie added successfully");
 
         document.getElementById('addMovieForm').reset();
     } else {
-        console.error('Actor ve Director rol id\'leri bulunamadı.');
+        console.error('Actor and Director role IDs not found.');
     }
 
 }
-
-
-
 
 function updateMovie() {
     const movieId = document.getElementById('updateMovieId').value;
@@ -236,15 +230,15 @@ function updateMovie() {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Film bilgileri güncellenirken hata oluştu');
+                throw new Error('An error occurred while updating movie information');
             }
         })
         .then(updatedMovie => {
-            console.log('Film başarıyla güncellendi:', updatedMovie);
-
+            console.log('Movie updated successfully', updatedMovie);
             document.getElementById('updateMovieForm').reset();
+            showMessage("Movie updated successfully")
         });
-    showMessage("film güncellendi")
+
 }
 
 function updateCrewMembers() {
@@ -253,10 +247,7 @@ function updateCrewMembers() {
     const directors = document.getElementById('updateDirectors')?.value.split(',').map(d => d.trim());
     const actors = document.getElementById('updateActors')?.value.split(',').map(a => a.trim());
 
-    const directorRoleId = 2;
-    const actorRoleId = 1;
 
-    // Eğer yönetmenler mevcutsa, onları güncellea
     if (directors && directors.length > 0) {
         directors.forEach(director => {
             const directorData = {
@@ -272,13 +263,13 @@ function updateCrewMembers() {
             })
                 .then(response => response.json())
                 .then(directorData => {
-                    console.log('Yönetmen başarıyla güncellendi:', directorData);
+                    console.log('Director updated successfully', directorData);
                     document.getElementById('updateCastForm').reset();
+                    showMessage("Cast updated successfully")
                 });
         });
     }
 
-    // Eğer aktörler mevcutsa, onları güncelle
     if (actors && actors.length > 0) {
         actors.forEach(actor => {
             const actorData = {
@@ -294,24 +285,44 @@ function updateCrewMembers() {
             })
                 .then(response => response.json())
                 .then(actorData => {
-                    console.log('Aktör başarıyla güncellendi:', actorData);
+                    console.log('Actor updated successfully', actorData);
                     document.getElementById('updateCastForm').reset();
-
+                    showMessage("Cast updated successfully")
                 });
         });
     }
-    showMessage("cast güncellendi")
-    // Kadro başarıyla güncellendiğinde kullanıcıya bildirim gönder
+
 }
 
+function deleteMovie() {
+    const movieId = document.getElementById('deleteMovieId').value;
 
+    if (!movieId) {
+        showMessage('Please enter a valid movie ID.');
+        return;
+    }
 
+    fetch(`http://localhost:8080/moviedb/movies/delete/${movieId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to delete the movie.');
+            }
+        })
+        .then(data => {
+            showMessage('Movie deleted successfully');
+            document.getElementById('deleteMovieForm').reset();
+        })
 
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     loadCategories();
 
-    // Formlara event listener'ları ekleyin
     document.getElementById('addMovieForm').addEventListener('submit', function(event) {
         event.preventDefault();
         addMovie();
@@ -325,5 +336,10 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('updateMovieForm').addEventListener('submit', function(event) {
         event.preventDefault();
         updateMovie();
+    });
+
+    document.getElementById('deleteMovieForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        deleteMovie();
     });
 });

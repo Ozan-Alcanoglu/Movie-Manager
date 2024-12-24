@@ -1,7 +1,6 @@
 version: '3.9'
 
 services:
-
   postgresql:
     image: docker.io/bitnami/postgresql:16
     ports:
@@ -12,10 +11,12 @@ services:
       - POSTGRESQL_USERNAME=postgres
       - POSTGRESQL_PASSWORD=postgresql3636
       - POSTGRESQL_DATABASE=MovieDb
+    networks:
+      - movie-network
 
-
-
-
+networks:
+  movie-network:
+    driver: bridge
 
 volumes:
   postgresql_data:
