@@ -338,8 +338,5 @@ document.addEventListener('DOMContentLoaded', function () {
         updateMovie();
     });
 
-    document.getElementById('deleteMovieForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        deleteMovie();
-    });
+
 });
