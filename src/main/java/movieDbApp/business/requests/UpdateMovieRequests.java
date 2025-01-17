@@ -16,17 +16,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateMovieRequests {
 
-	@NotNull(message = "isim boş olamaz")
-	@NotBlank(message = "isim boş olamaz")
+	@NotNull(message = "Name can not null")
+	@NotBlank(message = "Name can not null")
 	@Size(min=2, max=30)
 	private String name;
 	
-	@NotNull(message = "tarih kısmı boş bırakılamaz")
+	@NotNull(message = "Date can not null")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate date;
 	
-	@NotNull(message = "url boş olamaz")
-	@NotBlank(message = "url boş olamaz")
+	@NotNull(message = "Url can not null")
+	@NotBlank(message = "Url can not null")
 	private	String imageurl;
 	
 }

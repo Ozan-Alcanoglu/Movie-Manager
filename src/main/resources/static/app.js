@@ -108,47 +108,80 @@ function searchMovie() {
 }
 
 function addMovie() {
-    const title = document.getElementById('movieTitle').value;
-    const year = document.getElementById('movieYear').value;
-    const directors = document.getElementById('addmovieDirectors').value.split(',').map(d => d.trim());
-    const actors = document.getElementById('addmovieActors').value.split(',').map(a => a.trim());
-    const image = document.getElementById('movieImage').value;
+	const title = document.getElementById('movieTitle').value;
+	const year = document.getElementById('movieYear').value;
+	const directors = document.getElementById('addmovieDirectors').value.split(',').map(d => d.trim());
+	const actors = document.getElementById('addmovieActors').value.split(',').map(a => a.trim());
+	const castList = directors.concat(actors);
+	const image = document.getElementById('movieImage').value;
+	const categories = Array.from(document.querySelectorAll('#category input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
 
-    const dateObj = new Date(year);
-    const cmonth = dateObj.getUTCMonth() + 1;
-    const cday = dateObj.getUTCDate();
-    const cyear = dateObj.getUTCFullYear();
+	const dateObj = new Date(year);
+	const cmonth = dateObj.getUTCMonth() + 1;
+	const cday = dateObj.getUTCDate();
+	const cyear = dateObj.getUTCFullYear();
 
-    const newDate = `${cyear}-${cmonth.toString().padStart(2, '0')}-${cday.toString().padStart(2, '0')}`;
-    const newDatePost = new Date(newDate);
+	const newDate = `${cyear}-${cmonth.toString().padStart(2, '0')}-${cday.toString().padStart(2, '0')}`;
+	const newDatePost = new Date(newDate);
 
-    const movieData = {name: title, date: newDatePost, imageurl: image};
+	const movieData = { name: title, date: newDatePost, imageurl: image };
 
-    fetch('http://localhost:8080/moviedb/movies/add', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(movieData),
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('An API error occurred while adding the movie.');
-            }
-            return response.json(); // Return the JSON response
-        })
-        .then(data => {
-            console.log('Movie successfully added:', data);
-        })
-        .catch(error => {
-            console.error('An error occurred while adding the movie:', error);
-        });
+	fetch('http://localhost:8080/moviedb/movies/add', {
+	    method: 'POST',
+	    headers: {
+	        'Content-Type': 'application/json'
+	    },
+	    body: JSON.stringify(movieData)
+	})
+	.then(() => {
+	    castList.forEach(cast => {
+	        const movieCrewData = { movie: title, crew: cast };
 
+	        fetch('http://localhost:8080/moviedb/moviecrew/add', {
+	            method: 'POST',
+	            headers: {
+	                'Content-Type': 'application/json'
+	            },
+	            body: JSON.stringify(movieCrewData)
+	        })
+	        .then(response => response.json())
+	        .then(data => {
+	            console.log('Movie-Crew successfully added:', data);
+	        })
+	        .catch(error => {
+	            console.error('An error occurred while adding the movie-crew:', error);
+	        });
+	    });             
+	
+		    categories.forEach(category => {
+		        const movieGenreData = { movie: title, genre: category };
+
+		        fetch('http://localhost:8080/moviedb/moviegenre/add', {
+		            method: 'POST',
+		            headers: {
+		                'Content-Type': 'application/json'
+		            },
+		            body: JSON.stringify(movieGenreData)
+		        })
+		        .then(response => response.json())
+		        .then(data => {
+		            console.log('Movie-Genre successfully added:', data);
+		        })
+		        .catch(error => {
+		            console.error('An error occurred while adding the movie-genre:', error);
+		        });
+		    });
+		
+	});
+
+
+	
 
     const directorRoleId = 2;
     const actorRoleId = 1;
 
     if (directorRoleId && actorRoleId) {
+		
         directors.forEach(director => {
             const directorData = {
                 name: director,
@@ -162,13 +195,7 @@ function addMovie() {
                 },
                 body: JSON.stringify(directorData)
             })
-                .then(response => response.json())
-                .then(directorData => {
-                    console.log('Director successfully added:', directorData);
-                })
-                .catch(error => {
-                    console.error('An error occurred while adding the director:', error);
-                });
+                
         });
 
         actors.forEach(actor => {
@@ -184,21 +211,14 @@ function addMovie() {
                 },
                 body: JSON.stringify(actorData)
             })
-                .then(response => response.json())
-                .then(actorData => {
-                    console.log('Actor successfully added:', actorData);
-                })
-                .catch(error => {
-                    console.error('An error occurred while adding the actor:', error);
-                });
+                
         });
         showMessage("Movie added successfully");
 
-        document.getElementById('addMovieForm').reset();
     } else {
         console.error('Actor and Director role IDs not found.');
     }
-
+	document.getElementById('addMovieForm').reset();
 }
 
 function updateMovie() {
@@ -325,7 +345,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('addMovieForm').addEventListener('submit', function(event) {
         event.preventDefault();
-        addMovie();
+		addMovie()  
+		       
     });
 
     document.getElementById('updateCastForm').addEventListener('submit', function(event) {

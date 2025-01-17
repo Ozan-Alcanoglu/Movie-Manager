@@ -2,8 +2,6 @@ package movieDbApp.webApiController;
 
 import java.util.List;
 
-import movieDbApp.business.abstracts.GenreService;
-import movieDbApp.business.response.GetByNameGenreResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +21,8 @@ import movieDbApp.business.requests.UpdateMovieRequests;
 import movieDbApp.business.response.GetAllMovieResponse;
 import movieDbApp.business.response.GetByIdMovieResponse;
 import movieDbApp.business.response.GetByNameMovieResponse;
+import movieDbApp.dataAccess.MovieCrewRepository;
+import movieDbApp.dataAccess.MovieGenreRepository;
 
 @RestController
 @AllArgsConstructor
@@ -46,6 +46,7 @@ public class MovieController {
 		return this.movieService.getMovieByName(name);
 	}
 	
+
 	@PostMapping("/add")
 	@ResponseStatus(code=HttpStatus.CREATED)
 	public void add(@RequestBody @Valid CreateMovieRequests createMovieRequests) {

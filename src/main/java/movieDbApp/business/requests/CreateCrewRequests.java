@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateCrewRequests {
 
-	@NotNull(message="crew boş olamaz")
-	@NotBlank(message="crew boş olamaz")
+	@NotNull(message="Crew cannot be empty.")
+	@NotBlank(message="Crew cannot be empty.")
 	@Size(min=2, max=30)
 	private String name;
 	
-	@NotNull(message="crew boş olamaz")
+	@NotNull(message="Crew cannot be empty.")
 	private int id;
 }

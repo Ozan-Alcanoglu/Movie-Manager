@@ -10,11 +10,15 @@ import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 import movieDbApp.business.abstracts.MovieService;
+import movieDbApp.business.requests.CreateCrewRequests;
+import movieDbApp.business.requests.CreateGenreRequests;
 import movieDbApp.business.requests.CreateMovieRequests;
 import movieDbApp.business.requests.UpdateMovieRequests;
 import movieDbApp.business.rules.MovieBusinessRules;
 import movieDbApp.coreUtilites.exceptions.BusinessException;
 import movieDbApp.coreUtilites.mappers.ModelMapperService;
+import movieDbApp.entities.MovieCrew;
+import movieDbApp.entities.MovieGenre;
 import movieDbApp.entities.MovieName;
 
 @Service
@@ -25,7 +29,13 @@ public class MovieManager implements MovieService{
 	private MovieRepository movieRepository;
 	private ModelMapperService mapperService;
 	private MovieBusinessRules businessRules;
+	private MovieGenreRepository movieGenreRepository;
+	private MovieCrewRepository movieCrewRepository;	
+	private GenreRepository genreRepository;
+	private CrewRepository crewRepository;
 	
+	
+
 	
 	@Override
 	public List<GetAllMovieResponse> getAllMovie() {
@@ -50,7 +60,7 @@ public class MovieManager implements MovieService{
 			return movieResponse;			
 		}
 		else {
-			throw new BusinessException("bu ıd ye sahip film mecvut değil");
+			throw new BusinessException("The movie with this ID is not available.");
 		}
 		
 	}
@@ -67,9 +77,10 @@ public class MovieManager implements MovieService{
 			return movieResponse;
 		}
 		else {
-			throw new BusinessException("film mevcut değil");
+			throw new BusinessException("movie not found");
 		}
 	}
+	
 	
 	
 
@@ -79,15 +90,17 @@ public class MovieManager implements MovieService{
 		this.businessRules.checkifMovieNameExists(createMovieRequests.getName());
 		boolean isValidDate = businessRules.validateDateFormat(createMovieRequests.getDate().toString());
 	    if (!isValidDate) {
-	        throw new BusinessException("Geçersiz tarih formatı. Lütfen yyyy-MM-dd formatını kullanın.");
+	        throw new BusinessException("Invalid date format. Please use the yyyy-MM-dd format.");
 	    }
 		
 	    MovieName movieName=new MovieName();
+	    
 		movieName.setDate(createMovieRequests.getDate());
 		movieName.setName(createMovieRequests.getName());
 		movieName.setImageUrl(createMovieRequests.getImageurl());
 		
 		this.movieRepository.save(movieName);
+
 		
 	}
 
@@ -112,29 +125,6 @@ public class MovieManager implements MovieService{
 		this.movieRepository.deleteById(id);
 		
 	}
-
-
-
-
-
-	/*@Override
-	public void addMovieGenre(CreateMovieRequests createMovieRequests,CreateGenreRequests createGenreRequests) {
-		
-		int idMovie=movieRepository.findIdByName(createMovieRequests.getName().toString());
-		int idGenre=genreRepository.findIdByGenre(createGenreRequests.getName().toString());
-		
-		MovieName movieName;
-		movieName.setId(idGenre);
-	}
-
-	@Override
-	public void addMovieCrew(CreateMovieRequests createMovieRequests,CreateCrewRequests createCrewRequests) {
-		
-		
-		
-	}*/
-
-
 
 
 }

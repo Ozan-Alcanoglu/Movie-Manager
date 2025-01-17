@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateRoleRequests {
 
-	@NotNull(message="role boş olamaz")
-	@NotBlank(message="role boş olamaz")
+	@NotNull(message="Role can not null")
+	@NotBlank(message="Role can not null")
 	@Size(min=2, max=20)
 	private String role;
 }

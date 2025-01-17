@@ -7,6 +7,6 @@ import movieDbApp.entities.Crew;
 public interface CrewRepository  extends JpaRepository<Crew,Integer>{
 
 	boolean existsByName(String name);
-	
+	Crew findByName(String name);
 	int findIdByName(String name);
 }

@@ -12,6 +12,7 @@ import movieDbApp.business.requests.CreateCrewRequests;
 import movieDbApp.business.requests.UpdateCrewRequests;
 import movieDbApp.business.response.GetAllCrewResponse;
 import movieDbApp.business.response.GetByIdCrewResponse;
+import movieDbApp.business.response.GetByNameCrewResponse;
 import movieDbApp.business.rules.CrewBusinessRules;
 import movieDbApp.coreUtilites.exceptions.BusinessException;
 import movieDbApp.coreUtilites.mappers.ModelMapperService;
@@ -47,6 +48,21 @@ public class CrewManager implements CrewService{
 		GetByIdCrewResponse crewResponse=this.mapperService.forResponse().map(crew, GetByIdCrewResponse.class);
 		
 		return crewResponse;
+	}
+	
+	@Override
+	public GetByNameCrewResponse getCrewByName(String name) {
+		Crew crew=this.crewRepository.findByName(name);
+		
+		if(crew!=null) {
+			GetByNameCrewResponse crewResponse=this.mapperService.forResponse().map(crew, GetByNameCrewResponse.class);
+			
+			return crewResponse;
+		}
+		else {
+			throw new BusinessException("genre not found");
+		}
+		
 	}
 
 

@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateCrewRequests {
 
-	@NotNull(message="crew boş olamaz")
-	@NotBlank(message="crew boş olamaz")
+	@NotNull(message="Crew can not null")
+	@NotBlank(message="Crew can not null")
 	@Size(min=2, max=30)
 	private String name;
 
