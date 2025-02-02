@@ -14,7 +14,7 @@ import movieDbApp.business.requests.CreateMovieGenreRequests;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/moviedb/moviegenre")
+@RequestMapping("/api/moviedb/moviegenre")
 public class MovieGenreController {
 	
 	private MovieGenreService movieGenreService;

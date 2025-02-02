@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import movieDbApp.coreUtilites.exceptions.BusinessException;
+import movieDbApp.coreUtilites.exceptions.BusinessException;		
 import movieDbApp.coreUtilites.exceptions.ProblemDetails;
 import movieDbApp.coreUtilites.exceptions.ValidationProblemDetails;
 

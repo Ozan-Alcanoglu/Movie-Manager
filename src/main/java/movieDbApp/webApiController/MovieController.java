@@ -26,7 +26,7 @@ import movieDbApp.dataAccess.MovieGenreRepository;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/moviedb/movies")
+@RequestMapping("/api/moviedb/movies")
 public class MovieController {
 
 	private MovieService movieService;

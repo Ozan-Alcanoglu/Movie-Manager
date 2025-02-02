@@ -23,7 +23,7 @@ import movieDbApp.business.response.GetByIdRoleResponse;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/moviedb/roles")
+@RequestMapping("/api/moviedb/roles")
 public class RoleController {
 
 	private RoleService roleService;

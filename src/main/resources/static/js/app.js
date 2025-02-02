@@ -4,6 +4,43 @@ function showPage(page) {
     document.getElementById(page).classList.add('active-page');
 }
 
+async function logout() {
+    console.log('Logout fonksiyonu çağrıldı');
+    try {
+        console.log('Logout isteği gönderiliyor...');
+        const response = await fetch('http://localhost:8080/api/moviedb/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            credentials: 'include'
+        });
+
+        console.log('Logout response:', response);
+
+        if (response.ok) {
+            console.log('Logout başarılı, yönlendiriliyor...');
+            window.location.href = '/moviedb/login';
+        } else {
+            console.error('Logout işlemi başarısız oldu');
+            showMessage('Çıkış işlemi başarısız oldu', 'error');
+        }
+    } catch (error) {
+        console.error('Logout hatası:', error);
+        showMessage('Çıkış işlemi sırasında bir hata oluştu', 'error');
+    }
+} 
+
+function confirmLogout() {
+    const confirmAction = confirm("Are you sure?");
+    if (confirmAction) {
+        window.location.href = '/moviedb/register'; 
+    } else {
+        console.log("Logout operation cancelled.");
+    }
+}
+
 function showMessage(message) {
     const messageElement = document.getElementById('message');
     const content = document.getElementById('content');
@@ -18,7 +55,7 @@ function showMessage(message) {
 
 
 function loadCategories() {
-    fetch('http://localhost:8080/moviedb/genres')
+    fetch('http://localhost:8080/api/moviedb/genres')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network error');
@@ -62,7 +99,7 @@ function searchMovie() {
 
     if (searchMovieId) {
         moviePromises.push(
-            fetch(`/moviedb/movies/getbyid/${searchMovieId}`)
+            fetch(`/api/moviedb/movies/getbyid/${searchMovieId}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Movie not found');
@@ -78,7 +115,7 @@ function searchMovie() {
 
     if (searchMovieName) {
         moviePromises.push(
-            fetch(`/moviedb/movies/getname/${searchMovieName}`)
+            fetch(`/api/moviedb/movies/getname/${searchMovieName}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Movies not found');
@@ -126,7 +163,7 @@ function addMovie() {
 
 	const movieData = { name: title, date: newDatePost, imageurl: image };
 
-	fetch('http://localhost:8080/moviedb/movies/add', {
+	fetch('http://localhost:8080/api/moviedb/movies/add', {
 	    method: 'POST',
 	    headers: {
 	        'Content-Type': 'application/json'
@@ -137,7 +174,7 @@ function addMovie() {
 	    castList.forEach(cast => {
 	        const movieCrewData = { movie: title, crew: cast };
 
-	        fetch('http://localhost:8080/moviedb/moviecrew/add', {
+	        fetch('http://localhost:8080/api/moviedb/moviecrew/add', {
 	            method: 'POST',
 	            headers: {
 	                'Content-Type': 'application/json'
@@ -156,7 +193,7 @@ function addMovie() {
 		    categories.forEach(category => {
 		        const movieGenreData = { movie: title, genre: category };
 
-		        fetch('http://localhost:8080/moviedb/moviegenre/add', {
+		        fetch('http://localhost:8080/api/moviedb/moviegenre/add', {
 		            method: 'POST',
 		            headers: {
 		                'Content-Type': 'application/json'
@@ -188,7 +225,7 @@ function addMovie() {
                 id: directorRoleId,
             };
 
-            fetch('http://localhost:8080/moviedb/crews/add', {
+            fetch('http://localhost:8080/api/moviedb/crews/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -204,7 +241,7 @@ function addMovie() {
                 id: actorRoleId,
             };
 
-            fetch('http://localhost:8080/moviedb/crews/add', {
+            fetch('http://localhost:8080/api/moviedb/crews/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -241,7 +278,7 @@ function updateMovie() {
         imageurl: newImageUrl
     };
 
-    fetch(`http://localhost:8080/moviedb/movies/update/${movieId}`, {
+    fetch(`http://localhost:8080/api/moviedb/movies/update/${movieId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -274,7 +311,7 @@ function updateCrewMembers() {
                 name: director
             };
 
-            fetch(`http://localhost:8080/moviedb/crews/update/${castId}`, {
+            fetch(`http://localhost:8080/api/moviedb/crews/update/${castId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -296,7 +333,7 @@ function updateCrewMembers() {
                 name: actor
             };
 
-            fetch(`http://localhost:8080/moviedb/crews/update/${castId}`, {
+            fetch(`http://localhost:8080/api/moviedb/crews/update/${castId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -322,7 +359,7 @@ function deleteMovie() {
         return;
     }
 
-    fetch(`http://localhost:8080/moviedb/movies/delete/${movieId}`, {
+    fetch(`http://localhost:8080/api/moviedb/movies/delete/${movieId}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',

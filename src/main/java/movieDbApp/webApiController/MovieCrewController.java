@@ -14,7 +14,7 @@ import movieDbApp.business.requests.CreateMovieCrewRequests;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/moviedb/moviecrew")
+@RequestMapping("/api/moviedb/moviecrew")
 public class MovieCrewController {
 
 	private MovieCrewService movieCrewService;

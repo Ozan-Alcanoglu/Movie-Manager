@@ -25,7 +25,7 @@ import movieDbApp.business.response.GetByIdGenreResponse;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/moviedb/genres")
+@RequestMapping("/api/moviedb/genres")
 public class GenreController {
 
 	private GenreService genreService;

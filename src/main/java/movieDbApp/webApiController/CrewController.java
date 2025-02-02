@@ -23,7 +23,7 @@ import movieDbApp.business.response.GetByIdCrewResponse;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/moviedb/crews")
+@RequestMapping("/api/moviedb/crews")
 public class CrewController {
 
 	private CrewService crewService;

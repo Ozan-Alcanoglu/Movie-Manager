@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import movieDbApp.business.abstracts.MovieCrewService;
 import movieDbApp.business.requests.CreateMovieCrewRequests;
 import movieDbApp.dataAccess.CrewRepository;
-import movieDbApp.dataAccess.GenreRepository;
 import movieDbApp.dataAccess.MovieCrewRepository;
 import movieDbApp.dataAccess.MovieRepository;
 import movieDbApp.entities.Crew;
