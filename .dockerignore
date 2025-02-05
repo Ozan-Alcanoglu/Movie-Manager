@@ -1,0 +1,14 @@
+# Maven build dosyaları
+target/
+!target/*.jar
+
+# Git dosyaları
+.git
+.gitignore
+
+# IDE dosyaları
+.idea/
+*.iml
+
+# Logs
+*.log 

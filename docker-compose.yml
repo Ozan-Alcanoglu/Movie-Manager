@@ -1,23 +1,40 @@
-version: '3.9'
 
 services:
-  postgresql:
-    image: docker.io/bitnami/postgresql:16
+  # PostgreSQL servisi
+  postgres:
+    image: postgres:latest
+    container_name: moviedb-postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5433:5432"
     volumes:
-      - "postgresql_data:/bitnami/postgresql"
-    environment:
-      - POSTGRESQL_USERNAME=postgres
-      - POSTGRESQL_PASSWORD=postgresql3636
-      - POSTGRESQL_DATABASE=MovieDb
+      - postgres_data:/var/lib/postgresql/data
     networks:
-      - movie-network
+      - moviedb-network
 
-networks:
-  movie-network:
-    driver: bridge
+  # Spring Boot uygulaması
+  app:
+    build: .  # Dockerfile'dan build et
+    container_name: moviedb-app
+    depends_on:
+      - postgres  # Önce PostgreSQL başlasın
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - moviedb-network
 
+# Verilerin kalıcı olması için volume tanımla
 volumes:
-  postgresql_data:
-    driver: local
+  postgres_data:
+
+# Container'ların birbiriyle haberleşmesi için network tanımla
+networks:
+  moviedb-network:
+    driver: bridge
